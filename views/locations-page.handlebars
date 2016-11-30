@@ -1,0 +1,23 @@
+{{> header}}
+
+<main>
+   {{#each Location}}
+      <div class="person">
+         <p>
+            Location: {{Location.Location}}
+         </p>
+	 <p>
+	    Latitude: {{Location.Latitude}}
+	 </p>
+	 <p>
+	    Longitude: {{Location.Longitude}}
+ 	 </p>
+	 <p>
+	    Description: {{Location.Description}}
+	 </p>
+	 <p>
+	    Distance: {{Location.Distance}}
+	 </p>
+      </div>
+  {{/each}}
+</main>
