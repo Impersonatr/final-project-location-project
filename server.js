@@ -28,6 +28,12 @@ mysqlConnection.connect(function(err) {
   }
 });
 
+mysqlConnection.query('SELECT * FROM Locations ORDER BY Distance DESC');
+  if (err){
+    console.log("Failed to sort")
+  else
+    console.log("Sorted")
+  }
 
 
 /*
