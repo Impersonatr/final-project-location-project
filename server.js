@@ -28,11 +28,20 @@ mysqlConnection.connect(function(err) {
   }
 });
 
-mysqlConnection.query('SELECT * FROM Locations ORDER BY Distance DESC', function(err){
+mysqlConnection.query('SELECT * FROM Locations ORDER BY Distance DESC', function(err, rows){
   if (err){
     console.log("Failed to sort")
   }
   else{
+    var locations = [];
+    rows.forEach(function(row){
+      locations.push({
+        location: row.Title,
+        latitude: row.Latitude,
+        longitude: row.Longitude,
+        discription: row.Discription,
+        distance: row.Distance
+      });
     console.log("Sorted")
   }
 });
