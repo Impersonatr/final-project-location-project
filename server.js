@@ -28,14 +28,14 @@ mysqlConnection.connect(function(err) {
   }
 });
 
-mysqlConnection.query('SELECT * FROM Locations ORDER BY Distance DESC');
+mysqlConnection.query('SELECT * FROM Locations ORDER BY Distance DESC', function(err){
   if (err){
     console.log("Failed to sort")
   }
   else{
     console.log("Sorted")
   }
-
+});
 
 /*
  * Set up Express to use express-handlebars as the view engine.  This means
