@@ -41,10 +41,11 @@ mysqlConnection.query('SELECT * FROM Locations ORDER BY Distance DESC', function
         longitude: row.Longitude,
         discription: row.Discription,
         distance: row.Distance
-      })
+      });
     });
-    console.log("Sorted")}
- );
+    console.log("Sorted")
+  }
+  });
       
 /*
  * Set up Express to use express-handlebars as the view engine.  This means
