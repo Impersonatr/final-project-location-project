@@ -9,6 +9,25 @@ var mysql = require('mysql');
 var app = express();
 var port = process.env.PORT || 3000;
 
+var mysqlHost = "mysql.cs.orst.edu";
+var mysqlUser = "cs290_newelln";
+var mysqlPassword = "2956";
+var mysqlDB = "cs290_newelln";
+var mysqlConnection = mysql.createConnection({
+  host: mysqlHost,
+  user: mysqlUser,
+  password: mysqlPassword,
+  database: mysqlDB
+});
+
+
+mysqlConnection.connect(function(err) {
+  if (err) {
+    console.log("== Unable to make connection to MySQL Database.")
+    throw err;
+  }
+});
+
 
 
 /*
