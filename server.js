@@ -43,7 +43,6 @@ mysqlConnection.query('SELECT * FROM Locations ORDER BY Distance DESC', function
         distance: row.Distance
       });
     console.log("Sorted")
-  }
 });
 
 /*
