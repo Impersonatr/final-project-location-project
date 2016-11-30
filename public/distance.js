@@ -1,10 +1,10 @@
 //distance calculation between two points
 
-function getDistance(lat1In, long1In, lat2In, long2In){
-  var lat1 = lat1In;
-  var lat2 = lat2In;
-  var long1 = long1In;
-  var long2 = long2In;
+function getDistance(homeRow, row2){
+  var lat1 = homeRow.Latitude;
+  var lat2 = row2.Latitude;
+  var long1 = homeRow.Longitude;
+  var long2 = row2.Longitude;
   var deltaLat;
   var deltaLong;
 
@@ -14,4 +14,6 @@ function getDistance(lat1In, long1In, lat2In, long2In){
   var x = Math.pow(Math.sin(deltaLat * Math.PI / 180.0), 2) + Math.cos(lat1) * Math.cos(lat2) * Math.pow(Math.sin(deltaLong * Math.PI / 180.0), 2);
   var y = 2 * Math.atan2(sqrt(x), sqrt(1-x));
   var dist = R * c;
+
+  row2.Distance = dist;
 }
