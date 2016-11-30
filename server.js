@@ -13,6 +13,9 @@ var mysqlHost = "mysql.cs.orst.edu";
 var mysqlUser = "cs290_newelln";
 var mysqlPassword = "2956";
 var mysqlDB = "cs290_newelln";
+
+var locations = [];
+
 var mysqlConnection = mysql.createConnection({
   host: mysqlHost,
   user: mysqlUser,
@@ -27,25 +30,6 @@ mysqlConnection.connect(function(err) {
     throw err;
   }
 });
-
-mysqlConnection.query('SELECT * FROM Locations ORDER BY Distance DESC', function(err, rows){
-  if (err){
-    console.log("Failed to sort")
-  }
-  else{
-    var locations = [];
-    rows.forEach(function(row){
-      locations.push({
-        location: row.Title,
-        latitude: row.Latitude,
-        longitude: row.Longitude,
-        discription: row.Discription,
-        distance: row.Distance
-      });
-    });
-    console.log("Sorted")
-  }
-  });
       
 /*
  * Set up Express to use express-handlebars as the view engine.  This means
@@ -59,6 +43,7 @@ mysqlConnection.query('SELECT * FROM Locations ORDER BY Distance DESC', function
  * will take the content from `views/page.handlebars` and plug it into the
  * {{{body}}} placeholder in `views/layouts/main.handlebars`.
  */
+ 
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }))
 app.set('view engine', 'handlebars');
 
@@ -69,11 +54,64 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-app.get('/', function (req, res) {
+/* app.get('/', function (req, res) {
   res.render('index-page', {
     pageTitle: 'Welcome!'
   });
+}); */
+
+app.get('/', function (req, res) {
+
+  /*
+   * Initiate a database query for all of our people in the database.  We'll
+   * respond to the requesting client from within the callback of the MySQL
+   * query.
+   */
+  //mysqlConnection.query('SELECT * FROM Locations', function (err, rows) {
+  mysqlConnection.query('SELECT * FROM Locations ORDER BY Distance ASC', function(err, rows){
+
+
+    if (err) {
+
+      /*
+       * Send an error response if there was a problem fetching the people
+       * from the DB.
+       */
+      console.log("== Error fetching locations from database:", err);
+      res.status(500).send("Error fetching locations from database: " + err);
+
+    }
+
+      /*
+       * If we successfully fetched the people, use the data fetched from the
+       * DB to build an array to pass to Handlebars for rendering, and then
+       * do the rendering.
+       */
+	   
+      else{
+		rows.forEach(function(row){
+		  locations.push({
+			location: row.Title,
+			latitude: row.Latitude,
+			longitude: row.Longitude,
+			discription: row.Discription,
+			distance: row.Distance
+		  });
+		});
+		//console.log("Sorted")
+
+      res.render('locations-page', {
+        pageTitle: 'Famous People',
+        Location: locations
+      });
+
+    }
+
+  });
+
 });
+
+
 
 app.get('*', function(req, res) {
   res.status(404).render('404-page', {
