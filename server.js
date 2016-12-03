@@ -14,7 +14,6 @@ var mysqlUser = "cs290_newelln";
 var mysqlPassword = "2956";
 var mysqlDB = "cs290_newelln";
 
-var locations = [];
 
 var mysqlConnection = mysql.createConnection({
 	host: mysqlHost,
@@ -49,6 +48,8 @@ app.set('view engine', 'handlebars');
 
 // Parse all request bodies as JSON.
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
 
 // Serve static files from public/.
 app.use(express.static(path.join(__dirname, 'public')));
@@ -68,6 +69,7 @@ app.get('/', function (req, res) {
 					res.status(500).send("Error fetching locations from database: " + err);
 				}
 				else {
+					var locations = [];
 					rows.forEach(function(row){
 						locations.push({
 							location: row.Title,
@@ -107,4 +109,29 @@ app.get('*', function(req, res) {
 // Listen on the specified port.
 app.listen(port, function () {
   console.log("== Listening on port", port);
+});
+
+
+app.post('/add-place', function (req, res, next) {
+	if (req.body && req.body.title) {
+		var distance = 0;
+		//CALL DISTANCE FUNCTION HERE
+		//
+		//
+		
+		mysqlConnection.query(
+		'INSERT INTO Locations (Title, Latitude, Longitude, Description, Distance) VALUES (?, ?, ?, ?, ?)',
+		[ req.body.title, req.body.latitude, req.body.longitude, req.body.description, distance ],
+		function (err, result) {
+			if (err) {
+			  /*
+			   * Send an error response if there was a problem inserting the photos
+			   * into the DB.
+			   */
+				console.log("== Error inserting Locations from database:", err);
+				res.status(500).send("Error inserting new location into database: " + err);
+			}
+		});
+	}
+	res.status(200).redirect("/");
 });
