@@ -88,23 +88,46 @@ app.get('/', function (req, res) {
        * do the rendering.
        */
 	   
-      else{
-		rows.forEach(function(row){
-		  locations.push({
-			location: row.Title,
-			latitude: row.Latitude,
-			longitude: row.Longitude,
-			discription: row.Discription,
-			distance: row.Distance
-		  });
+	else{
+		mysqlConnection.query('SELECT * FROM HomeTable', function(err, home){
+			if (err) {
+
+      /*
+       * Send an error response if there was a problem fetching the people
+       * from the DB.
+       */
+      console.log("== Error fetching locations from database:", err);
+      res.status(500).send("Error fetching locations from database: " + err);
+
+			}
+			else {
+				rows.forEach(function(row){
+					locations.push({
+						location: row.Title,
+						latitude: row.Latitude,
+						longitude: row.Longitude,
+						discription: row.Discription,
+						distance: row.Distance
+					});
+				});
+				
+				var homeT = [];
+				
+				home.forEach(function(home) {
+					homeT.push ({
+						location: home.Title,
+						latitude: home.Latitude,
+						longitude: home.Longitude
+					});
+				});
+				res.render('locations-page', {
+					pageTitle: 'Project - Locations',
+					Location: locations,
+					Home: homeT
+				});
+			}
 		});
-		//console.log("Sorted")
-
-      res.render('locations-page', {
-        pageTitle: 'Famous People',
-        Location: locations
-      });
-
+		
     }
 
   });

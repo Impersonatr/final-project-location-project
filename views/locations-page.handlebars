@@ -1,23 +1,36 @@
 {{> header}}
 
 <main>
-   {{#each Location}}
-      <div class="person">
-         <p>
-            Location: {{location}}
-         </p>
-	 <p>
-	    Latitude: {{latitude}}
-	 </p>
-	 <p>
-	    Longitude: {{longitude}}
- 	 </p>
-	 <p>
-	    Description: {{description}}
-	 </p>
-	 <p>
-	    Distance: {{distance}}
-	 </p>
-      </div>
-  {{/each}}
+	{{#each Home}}
+		<div class="person">
+			<p><a target="_blank" href="http://maps.google.com/maps?q={{latitude}},{{longitude}}">Home</a></p>
+			<p>
+				Latitude: {{latitude}}
+			</p>
+			<p>
+				Longitude: {{longitude}}
+			</p>
+		</div>
+	{{/each}}
+	{{#each Location}}
+		<div class="person">
+			<p>
+				Location: <a target="_blank" href="http://maps.google.com/maps?q={{latitude}},{{longitude}}">{{location}}</a>
+			</p>
+			<p>
+				Latitude: {{latitude}}
+			</p>
+			<p>
+				Longitude: {{longitude}}
+			</p>
+			<p>
+				Description: {{description}}
+			</p>
+			<p>
+				Distance: {{distance}}
+			</p>
+		</div>
+	{{/each}}
 </main>
+
+{{> add-photo-modal}}
