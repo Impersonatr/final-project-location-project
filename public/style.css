@@ -2,14 +2,15 @@ body {
   font-family: "Helvetica Neue", Helvetica, sans-serif;
   font-size: 24px;
   font-weight: 100;
-  background-color: #e5eefb;
+  background-image: url("background_pic.jpg");
   margin: 0;
 }
 
 header {
   padding: 20px;
-  background-color: #f07673;
-  color: #fff;
+  background-color: #373737;
+  color: #C34500;
+  font-family:fantasy;
 }
 
 header h1 {
@@ -19,11 +20,11 @@ header h1 {
 
 a {
   text-decoration: none;
-  font-weight: 200;
+  color: #373737;
 }
 
 a:hover {
-  background-color: #dedede;
+  background-color: #C34500;
 }
 
 .info,
@@ -34,10 +35,24 @@ a:hover {
   border: 3px solid #333;
   border-radius: 10px;
   background-color: #fff;
+  color: #373737;
+}
+.person-photo-container a:hover{
+
 }
 
 .person-photo-container {
   text-align: center;
+}
+
+.info,
+.Home {
+  margin: 20px;
+  padding: 20px;
+  border: 3px solid #333;
+  border-radius: 10px;
+  background-color: #E8CDA1;
+  color: #373737;
 }
 
 .person-photo {
@@ -49,6 +64,10 @@ a:hover {
   margin: 0;
 }
 
+.info p,
+.Home p {
+  margin: 0;
+}
 .highlight {
   background-color: #8eb35f;
 }
