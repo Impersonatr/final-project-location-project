@@ -1,14 +1,14 @@
 /*
  * This function displays the modal for adding a photo to a user page.
  */
-function displayAddPhotoModal() {
+function displayAddPlaceModal() {
 
   var backdropElem = document.getElementById('modal-backdrop');
-  var addPhotoModalElem = document.getElementById('add-photo-modal');
+  var addPlaceModalElem = document.getElementById('add-place-modal');
 
   // Show the modal and its backdrop.
   backdropElem.classList.remove('hidden');
-  addPhotoModalElem.classList.remove('hidden');
+  addPlaceModalElem.classList.remove('hidden');
 
 }
 
@@ -17,16 +17,16 @@ function displayAddPhotoModal() {
  * This function closes the modal for adding a photo to a user page, clearing
  * the values in its input elements.
  */
-function closeAddPhotoModal() {
+function closeAddPlaceModal() {
 
   var backdropElem = document.getElementById('modal-backdrop');
-  var addPhotoModalElem = document.getElementById('add-photo-modal');
+  var addPlaceModalElem = document.getElementById('add-place-modal');
 
   // Hide the modal and its backdrop.
   backdropElem.classList.add('hidden');
-  addPhotoModalElem.classList.add('hidden');
+  addPlaceModalElem.classList.add('hidden');
 
-  clearPhotoInputValues();
+  clearPlaceInputValues();
 
 }
 
@@ -34,9 +34,9 @@ function closeAddPhotoModal() {
 /*
  * This function clears the values of all input elements in the photo modal.
  */
-function clearPhotoInputValues() {
+function clearPlaceInputValues() {
 
-  var inputElems = document.getElementsByClassName('photo-input-element');
+  var inputElems = document.getElementsByClassName('place-input-element');
   for (var i = 0; i < inputElems.length; i++) {
     var input = inputElems[i].querySelector('input, textarea');
     input.value = '';
@@ -61,71 +61,44 @@ function getPersonIDFromLocation() {
  * This function uses Handlebars on the client side to generate HTML for a
  * person photo and adds that person photo HTML into the DOM.
  */
-function insertNewPhoto() {
+function insertNewPlace() {
+	var title = document.getElementById('place-title-input').value || '';
+	var latitude = document.getElementById('place-lat-input').value || '';
+	var longitude = document.getElementById('place-long-input').value || '';
+	var description = document.getElementById('place-desc-input').value || '';
 
-  var photoURL = document.getElementById('photo-url-input').value || '';
-  var photoCaption = document.getElementById('photo-caption-input').value || '';
-
-  if (photoURL.trim()) {
-
-    var personID = getPersonIDFromLocation();
-    if (personID) {
-      storePersonPhoto(personID, photoURL, photoCaption, function (err) {
-        if (err) {
-
-          // If we couldn't save the person photo, alert the user.
-          alert("Unable to save person's photo.  Got this error:\n\n" + err);
-
-        } else {
-
-          /*
-           * If we successfully saved the person photo, generate HTML for the
-           * new photo element and add it into the DOM.
-           */
-          var personPhotoTemplate = Handlebars.templates['person-photo'];
-          var personPhotoHTML = personPhotoTemplate({
-            url: photoURL,
-            caption: photoCaption
-          });
-          var mainElement = document.querySelector('main');
-          mainElement.insertAdjacentHTML('beforeend', personPhotoHTML);
-
-        }
-      });
-    }
-
-    closeAddPhotoModal();
-
-  } else {
-
-    alert('You must specify a value for the "URL" field.');
-
-  }
-
+	if (title.trim()) {
+		storeNewLocation(title, latitude, longitude, description, function (err) {
+			if (err) {alert("Unable to save this new location. Got this error:\n\n" + err);} 
+		});
+    
+	closeAddPlaceModal();
+	} 
+	else {alert('You must specify a title!');}
 }
 
 
 // Wait until the DOM content is loaded to hook up UI interactions, etc.
 window.addEventListener('DOMContentLoaded', function (event) {
 
-  var addPhotoButton = document.getElementById('add-photo-button');
-  if (addPhotoButton) {
-    addPhotoButton.addEventListener('click', displayAddPhotoModal);
+  var addPlaceButton = document.getElementById('add-place-button');
+  if (addPlaceButton) {
+    addPlaceButton.addEventListener('click', displayAddPlaceModal);
   }
 
-  var modalCloseButton = document.querySelector('#add-photo-modal .modal-close-button');
+  var modalCloseButton = document.querySelector('#add-place-modal .modal-close-button');
   if (modalCloseButton) {
-    modalCloseButton.addEventListener('click', closeAddPhotoModal);
+    modalCloseButton.addEventListener('click', closeAddPlaceModal);
   }
 
-  var modalCancalButton = document.querySelector('#add-photo-modal .modal-cancel-button');
+  var modalCancalButton = document.querySelector('#add-place-modal .modal-cancel-button');
   if (modalCancalButton) {
-    modalCancalButton.addEventListener('click', closeAddPhotoModal);
+    modalCancalButton.addEventListener('click', closeAddPlaceModal);
   }
 
-  var modalAcceptButton = document.querySelector('#add-photo-modal .modal-accept-button');
+  var modalAcceptButton = document.querySelector('#add-place-modal .modal-accept-button');
   if (modalAcceptButton) {
-    modalAcceptButton.addEventListener('click', insertNewPhoto);
+    modalAcceptButton.addEventListener('click', insertNewPlace);
   }
 
 });
