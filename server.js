@@ -55,7 +55,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', function (req, res) {
-
 	mysqlConnection.query('SELECT * FROM Locations ORDER BY Distance ASC', function(err, rows){
 		if (err) {
 		  console.log("== Error fetching locations from database:", err);
@@ -99,6 +98,12 @@ app.get('/', function (req, res) {
 	});
 });
 
+app.get('/reset', function(req, res) {
+	mysqlConnection.query('DELETE FROM Locations WHERE Distance = "0"', function(err){
+		if (err) {console.log("== Error deleting locations from database:", err);}
+		res.status(200).send();
+	});
+});
 
 app.get('*', function(req, res) {
   res.status(404).render('404-page', {
