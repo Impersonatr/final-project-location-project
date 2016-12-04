@@ -30,8 +30,11 @@ a:hover {
 .info,
 .person,
 .person-place-container {
-  margin: 20px;
+  margin: auto;
+  margin-bottom: 20px;
   padding: 20px;
+  align-self: center;
+  width: 70%;
   border: 3px solid #333;
   border-radius: 10px;
   background-color: #fff;
