@@ -20,6 +20,7 @@ function storeNewLocation(title, lati, longi, desc, callback) {
 		"title": title,
 		"latitude": lati,
 		"longitude": longi,
-		"description": desc
+		"description": desc,
+		"distance": "0"
   }));
 }

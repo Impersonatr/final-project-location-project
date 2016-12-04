@@ -69,14 +69,21 @@ function insertNewPlace() {
 
 	if (title.trim()) {
 		storeNewLocation(title, latitude, longitude, description, function (err) {
-			if (err) {alert("Unable to save this new location. Got this error:\n\n" + err);} 
+			if (err) {alert("Unable to save this new location. Got this error:\n\n" + err);}
+			
+			//alert("Entry successful! Refresh to view changes.");
+			//alert("Entry successful! Refresh to view changes.", function() {location.reload();});
 		});
     
 	closeAddPlaceModal();
-	} 
+	reloader();
+	}
 	else {alert('You must specify a title!');}
 }
 
+function reloader() {
+	setTimeout("location.reload(true);", 500);
+}
 
 // Wait until the DOM content is loaded to hook up UI interactions, etc.
 window.addEventListener('DOMContentLoaded', function (event) {

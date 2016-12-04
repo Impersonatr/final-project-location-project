@@ -74,7 +74,7 @@ app.get('/', function (req, res) {
 							location: row.Title,
 							latitude: row.Latitude,
 							longitude: row.Longitude,
-							discription: row.Discription,
+							description: row.Description,
 							distance: row.Distance
 						});
 					});
@@ -119,24 +119,20 @@ app.listen(port, function () {
 
 app.post('/add-place', function (req, res, next) {
 	if (req.body && req.body.title) {
-		var distance = 0;
-		//CALL DISTANCE FUNCTION HERE
-		//
-		//
-		
-		mysqlConnection.query(
-		'INSERT INTO Locations (Title, Latitude, Longitude, Description, Distance) VALUES (?, ?, ?, ?, ?)',
-		[ req.body.title, req.body.latitude, req.body.longitude, req.body.description, distance ],
-		function (err, result) {
-			if (err) {
-			  /*
-			   * Send an error response if there was a problem inserting the photos
-			   * into the DB.
-			   */
-				console.log("== Error inserting Locations from database:", err);
-				res.status(500).send("Error inserting new location into database: " + err);
+		mysqlConnection.query('SELECT * FROM HomeTable', function(err, home){
+			if (err) {console.log("== Error getting Home!:", err);}
+			else {
+				//getDistance(home, req.body);
+				
+				mysqlConnection.query('INSERT INTO Locations (Title, Latitude, Longitude, Description, Distance) VALUES (?, ?, ?, ?, ?)',
+				[req.body.title, req.body.latitude, req.body.longitude, req.body.description, req.body.distance], function (err, result) {
+					if (err) {
+						console.log("== Error inserting Locations from database:", err);
+						res.status(500).send("Error inserting new location into database: " + err);
+					}
+					//else {res.status(201).send("Entry successful! Refresh to view changes.");}
+				});
 			}
 		});
 	}
-	res.status(200).redirect("/");
 });
