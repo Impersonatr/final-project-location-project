@@ -122,10 +122,35 @@ app.post('/add-place', function (req, res, next) {
 		mysqlConnection.query('SELECT * FROM HomeTable', function(err, home){
 			if (err) {console.log("== Error getting Home!:", err);}
 			else {
-				//getDistance(home, req.body);
+				//var distance = getDistance(home, req.body);
+				var distance = 0;
+				
+				function getDistance(home, newRow){
+					var lat1 = home.Latitude;
+					var lat2 = newRow.latitude;
+					var long1 = home.Longitude;
+					var long2 = newRow.longitude;
+					var deltaLat;
+					var deltaLong;
+
+					var R = 3961; //this is the radius of the Earth in miles
+					deltaLat = lat2 - lat1;
+					deltaLong = long2 - long1;
+					var x = Math.pow(Math.sin(deltaLat * Math.PI / 180.0), 2) + Math.cos(lat1) * Math.cos(lat2) * Math.pow(Math.sin(deltaLong * Math.PI / 180.0), 2);
+					var y = 2 * Math.atan2(Math.sqrt(x), Math.sqrt(1-x));
+					var dist = R * y;
+
+					return distance = dist;
+				}
+				
+				console.log(distance);
+				
+				
+				
+				
 				
 				mysqlConnection.query('INSERT INTO Locations (Title, Latitude, Longitude, Description, Distance) VALUES (?, ?, ?, ?, ?)',
-				[req.body.title, req.body.latitude, req.body.longitude, req.body.description, req.body.distance], function (err, result) {
+				[req.body.title, req.body.latitude, req.body.longitude, req.body.description, distance], function (err, result) {
 					if (err) {
 						console.log("== Error inserting Locations from database:", err);
 						res.status(500).send("Error inserting new location into database: " + err);
