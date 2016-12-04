@@ -29,7 +29,7 @@ a:hover {
 
 .info,
 .person,
-.person-photo-container {
+.person-place-container {
   margin: 20px;
   padding: 20px;
   border: 3px solid #333;
@@ -37,11 +37,11 @@ a:hover {
   background-color: #fff;
   color: #373737;
 }
-.person-photo-container a:hover{
+.person-place-container a:hover{
 
 }
 
-.person-photo-container {
+.person-place-container {
   text-align: center;
 }
 
@@ -55,7 +55,7 @@ a:hover {
   color: #373737;
 }
 
-.person-photo {
+.person-place {
   max-width: 100%;
 }
 
@@ -81,14 +81,14 @@ a:hover {
   margin: 20px;
 }
 
-.add-photo-button-container {
+.add-place-button-container {
   position: fixed;
   bottom: 35px;
   right: 35px;
   z-index: 10;
 }
 
-#add-photo-button {
+#add-place-button {
   width: 64px;
   height: 64px;
   background-color: red;
@@ -103,7 +103,7 @@ a:hover {
   outline: none;
 }
 
-#add-photo-button:hover {
+#add-place-button:hover {
   box-shadow: 2px 6px 12px rgba(0, 0, 0, 0.33);
 }
 
@@ -117,7 +117,7 @@ a:hover {
   background-color: rgba(0, 0, 0, 0.85);
 }
 
-#add-photo-modal {
+#add-place-modal {
   position: fixed;
   top: 0;
   bottom: 0;
@@ -166,28 +166,28 @@ a:hover {
   padding: 20px;
 }
 
-.photo-input-element {
+.place-input-element {
   display: flex;
   align-items: center;
   font-size: 20px;
   margin: 10px 0;
 }
 
-.photo-input-element label {
+.place-input-element label {
   font-weight: 600;
   flex: 1 75px;
   margin-right: 10px;
 }
 
-.photo-input-element input,
-.photo-input-element textarea {
+.place-input-element input,
+.place-input-element textarea {
   flex: 6 200px;
   padding: 8px;
   font-size: 20px;
   border: 1px solid #aaa;
 }
 
-.photo-input-element textarea {
+.place-input-element textarea {
   min-height: 64px;
 }
 
