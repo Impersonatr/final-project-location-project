@@ -13,7 +13,7 @@
 		</div>
 	{{/each}}
 	{{#each Locations}}
-		<div class="person">
+		<div class="place-container">
 			<p>
 				Location: <a target="_blank" href="http://maps.google.com/maps?q={{latitude}},{{longitude}}">{{location}}</a>
 			</p>
@@ -29,8 +29,11 @@
 			<p>
 				Distance: {{distance}}
 			</p>
+			<div class="delete-container">
+				<button id="delete-place">x</button>
+			</div>
 		</div>
 	{{/each}}
 </main>
 
-{{> add-photo-modal}}
+{{> add-place-modal}}
