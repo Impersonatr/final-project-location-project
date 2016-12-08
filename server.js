@@ -9,6 +9,7 @@ var mysql = require('mysql');
 var app = express();
 var port = process.env.PORT || 3000;
 
+//Very Secret Credentials Do Not Steal
 var mysqlHost = "mysql.cs.orst.edu";
 var mysqlUser = "cs290_newelln";
 var mysqlPassword = "2956";
@@ -46,7 +47,6 @@ mysqlConnection.connect(function(err) {
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }))
 app.set('view engine', 'handlebars');
 
-// Parse all request bodies as JSON.
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -54,6 +54,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // Serve static files from public/.
 app.use(express.static(path.join(__dirname, 'public')));
 
+//index page
 app.get('/', function (req, res) {
 	mysqlConnection.query('SELECT * FROM Locations ORDER BY Distance ASC', function(err, rows){
 		if (err) {
@@ -98,6 +99,7 @@ app.get('/', function (req, res) {
 	});
 });
 
+//reset page, now useless basically? Clears all values from table with distance value of 0
 app.get('/reset', function(req, res) {
 	mysqlConnection.query('DELETE FROM Locations WHERE Distance = "0"', function(err){
 		if (err) {console.log("== Error deleting locations from database:", err);}
@@ -105,49 +107,35 @@ app.get('/reset', function(req, res) {
 	});
 });
 
+//404 page, catches all other URLs
 app.get('*', function(req, res) {
-  res.status(404).render('404-page', {
-    pageTitle: '404'
-  });
+	res.status(404).render('404-page', {
+		pageTitle: '404'
+	});
 });
 
-// Listen on the specified port.
+//Listen on the specified port.
 app.listen(port, function () {
-  console.log("== Listening on port", port);
+	console.log("== Listening on port", port);
 });
 
-
+//listen for a POST to the URL /add-place, and if valid, store the data
 app.post('/add-place', function (req, res, next) {
 	if (req.body && req.body.title) {
 		mysqlConnection.query('SELECT * FROM HomeTable', function(err, home){
 			if (err) {console.log("== Error getting Home!:", err);}
 			else {
-				//var distance = getDistance(home, req.body);
-				var distance = 0;
+				var homeT = [];
+				home.forEach(function(home) {
+					homeT.push ({
+						location: home.Title,
+						latitude: home.Latitude,
+						longitude: home.Longitude
+					});
+				});
 				
-				function getDistance(home, newRow){
-					var lat1 = home.Latitude;
-					var lat2 = newRow.latitude;
-					var long1 = home.Longitude;
-					var long2 = newRow.longitude;
-					var deltaLat;
-					var deltaLong;
-
-					var R = 3961; //this is the radius of the Earth in miles
-					deltaLat = lat2 - lat1;
-					deltaLong = long2 - long1;
-					var x = Math.pow(Math.sin(deltaLat * Math.PI / 180.0), 2) + Math.cos(lat1) * Math.cos(lat2) * Math.pow(Math.sin(deltaLong * Math.PI / 180.0), 2);
-					var y = 2 * Math.atan2(Math.sqrt(x), Math.sqrt(1-x));
-					var dist = R * y;
-
-					return distance = dist;
-				}
-				
-				console.log(distance);
-				
-				
-				
-				
+				//calculate the distance!
+				var distance = getDistance(homeT[0].latitude, homeT[0].longitude, req.body);
 				
 				mysqlConnection.query('INSERT INTO Locations (Title, Latitude, Longitude, Description, Distance) VALUES (?, ?, ?, ?, ?)',
 				[req.body.title, req.body.latitude, req.body.longitude, req.body.description, distance], function (err, result) {
@@ -155,9 +143,28 @@ app.post('/add-place', function (req, res, next) {
 						console.log("== Error inserting Locations from database:", err);
 						res.status(500).send("Error inserting new location into database: " + err);
 					}
-					//else {res.status(201).send("Entry successful! Refresh to view changes.");}
 				});
 			}
 		});
 	}
 });
+
+//The following function calculates the distance between our coordinates
+function getDistance(lati, longi, newRow){	
+	var lat1 = lati;
+	var lat2 = newRow.latitude;
+	var long1 = longi;
+	var long2 = newRow.longitude;
+	var deltaLat;
+	var deltaLong;
+	
+	var R = 3961; //this is the radius of the Earth in miles
+	deltaLat = lat2 - lat1;
+	deltaLong = long2 - long1;
+	
+	var x = Math.pow(Math.sin(deltaLat * Math.PI / 180.0), 2) + Math.cos(lat1) * Math.cos(lat2) * Math.pow(Math.sin(deltaLong * Math.PI / 180.0), 2);
+	var y = 2 * Math.atan2(Math.sqrt(x), Math.sqrt(1-x));
+	var dist = R * y;
+
+	return dist;
+}
