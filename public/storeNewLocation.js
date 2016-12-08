@@ -3,7 +3,7 @@
 
 function storeNewLocation(title, lati, longi, desc, callback) {
 	var postUrl = '/add-place';
-	
+
 	var postRequest = new XMLHttpRequest();
 	postRequest.open('POST', postUrl);
 	postRequest.setRequestHeader('Content-Type', 'application/json');

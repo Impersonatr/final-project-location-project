@@ -27,9 +27,7 @@ a:hover {
   background-color: #C34500;
 }
 
-.info,
-.person,
-.person-place-container {
+.place-container {
   margin: auto;
   margin-bottom: 20px;
   padding: 20px;
@@ -40,15 +38,11 @@ a:hover {
   background-color: #fff;
   color: #373737;
 }
-.person-place-container a:hover{
 
+.place-container p {
+  margin: 0;
 }
 
-.person-place-container {
-  text-align: center;
-}
-
-.info,
 .Home {
   margin: 20px;
   padding: 20px;
@@ -58,25 +52,8 @@ a:hover {
   color: #373737;
 }
 
-.person-place {
-  max-width: 100%;
-}
-
-.info p,
-.person p {
-  margin: 0;
-}
-
-.info p,
 .Home p {
   margin: 0;
-}
-.highlight {
-  background-color: #8eb35f;
-}
-
-.highlight a:hover {
-  background-color: #b4cb98;
 }
 
 .error-message {

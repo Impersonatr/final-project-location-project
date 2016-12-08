@@ -1,66 +1,41 @@
-/*
- * This function displays the modal for adding a photo to a user page.
- */
+//client-side functions!
+
+
 function displayAddPlaceModal() {
 
-  var backdropElem = document.getElementById('modal-backdrop');
-  var addPlaceModalElem = document.getElementById('add-place-modal');
+	var backdropElem = document.getElementById('modal-backdrop');
+	var addPlaceModalElem = document.getElementById('add-place-modal');
 
-  // Show the modal and its backdrop.
-  backdropElem.classList.remove('hidden');
-  addPlaceModalElem.classList.remove('hidden');
+	//Un-hide the modal
+	backdropElem.classList.remove('hidden');
+	addPlaceModalElem.classList.remove('hidden');
 
 }
 
 
-/*
- * This function closes the modal for adding a photo to a user page, clearing
- * the values in its input elements.
- */
+//Hide the modal and clear values
 function closeAddPlaceModal() {
+	var backdropElem = document.getElementById('modal-backdrop');
+	var addPlaceModalElem = document.getElementById('add-place-modal');
 
-  var backdropElem = document.getElementById('modal-backdrop');
-  var addPlaceModalElem = document.getElementById('add-place-modal');
 
-  // Hide the modal and its backdrop.
-  backdropElem.classList.add('hidden');
-  addPlaceModalElem.classList.add('hidden');
+	backdropElem.classList.add('hidden');
+	addPlaceModalElem.classList.add('hidden');
 
-  clearPlaceInputValues();
-
+	clearPlaceInputValues();
 }
 
 
-/*
- * This function clears the values of all input elements in the photo modal.
- */
+//Clear all values in the modal's fields
 function clearPlaceInputValues() {
-
-  var inputElems = document.getElementsByClassName('place-input-element');
-  for (var i = 0; i < inputElems.length; i++) {
-    var input = inputElems[i].querySelector('input, textarea');
-    input.value = '';
-  }
-
+	var inputElems = document.getElementsByClassName('place-input-element');
+	for (var i = 0; i < inputElems.length; i++) {
+		var input = inputElems[i].querySelector('input, textarea');
+		input.value = '';
+	}
 }
 
-
-/*
- * Small function to get a person's identifier from the current URL.
- */
-function getPersonIDFromLocation() {
-  var pathComponents = window.location.pathname.split('/');
-  if (pathComponents[0] !== '' && pathComponents[1] !== 'people') {
-    return null;
-  }
-  return pathComponents[2];
-}
-
-
-/*
- * This function uses Handlebars on the client side to generate HTML for a
- * person photo and adds that person photo HTML into the DOM.
- */
+//Find the fields, and if conditions are met send off the entries to be added to db. Will also reload the page after completion! 
 function insertNewPlace() {
 	var title = document.getElementById('place-title-input').value || '';
 	var latitude = document.getElementById('place-lat-input').value || '';
@@ -69,10 +44,7 @@ function insertNewPlace() {
 
 	if (title.trim()) {
 		storeNewLocation(title, latitude, longitude, description, function (err) {
-			if (err) {alert("Unable to save this new location. Got this error:\n\n" + err);}
-			
-			//alert("Entry successful! Refresh to view changes.");
-			//alert("Entry successful! Refresh to view changes.", function() {location.reload();});
+			if (err) {alert("Unable to save this new location for the following reason:\n\n" + err);}
 		});
     
 	closeAddPlaceModal();
@@ -81,31 +53,30 @@ function insertNewPlace() {
 	else {alert('You must specify a title!');}
 }
 
+//forces a page refresh to show sorted insertion of new location
 function reloader() {
 	setTimeout("location.reload(true);", 500);
 }
 
-// Wait until the DOM content is loaded to hook up UI interactions, etc.
+//Modal listener set-up
 window.addEventListener('DOMContentLoaded', function (event) {
+	var addPlaceButton = document.getElementById('add-place-button');
+	if (addPlaceButton) {
+		addPlaceButton.addEventListener('click', displayAddPlaceModal);
+	}
 
-  var addPlaceButton = document.getElementById('add-place-button');
-  if (addPlaceButton) {
-    addPlaceButton.addEventListener('click', displayAddPlaceModal);
-  }
+	var modalCloseButton = document.querySelector('#add-place-modal .modal-close-button');
+	if (modalCloseButton) {
+		modalCloseButton.addEventListener('click', closeAddPlaceModal);
+	}
 
-  var modalCloseButton = document.querySelector('#add-place-modal .modal-close-button');
-  if (modalCloseButton) {
-    modalCloseButton.addEventListener('click', closeAddPlaceModal);
-  }
+	var modalCancelButton = document.querySelector('#add-place-modal .modal-cancel-button');
+	if (modalCancelButton) {
+		modalCancelButton.addEventListener('click', closeAddPlaceModal);
+	}
 
-  var modalCancalButton = document.querySelector('#add-place-modal .modal-cancel-button');
-  if (modalCancalButton) {
-    modalCancalButton.addEventListener('click', closeAddPlaceModal);
-  }
-
-  var modalAcceptButton = document.querySelector('#add-place-modal .modal-accept-button');
-  if (modalAcceptButton) {
-    modalAcceptButton.addEventListener('click', insertNewPlace);
-  }
-
+	var modalAcceptButton = document.querySelector('#add-place-modal .modal-accept-button');
+	if (modalAcceptButton) {
+		modalAcceptButton.addEventListener('click', insertNewPlace);
+	}
 });
