@@ -149,6 +149,30 @@ app.post('/add-place', function (req, res, next) {
 	}
 });
 
+
+app.post('/remove-place', function (req, res, next) {
+	if(req.body) {
+		mysqlConnection.query('DELETE FROM Locations WHERE Latitude = ? AND Longitude = ?',
+		[req.body.latitude, req.body.longitude], function(err){
+			if (err) {
+				console.log("== Error deleting location from database:", err);
+				res.status(500).send("Error inserting new location into database: " + err);
+			}
+			else{res.status(200).send();}			
+		});
+	}
+
+
+});
+
+app.post('/update-home', function (req, res, next) {
+	if(req.body) {
+		
+	}
+
+
+});
+
 //The following function calculates the distance between our coordinates
 function getDistance(lati, longi, newRow){	
 	var lat1 = lati;

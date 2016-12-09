@@ -53,6 +53,51 @@ function insertNewPlace() {
 	else {alert('You must specify a title!');}
 }
 
+function editHome (event) {
+	var clickedElem = event.target;
+	var clickedElemParent = event.target.parentNode;
+	alert('I get these:', clickedElem, clickedElemParent);
+}
+
+function deletePlace (event) {
+	var i, lat, longi;
+	var clickedElemParent = event.target.parentNode;
+	var clickedPlaceContainer = clickedElemParent.parentNode;
+	var allChildren = clickedPlaceContainer.childNodes;
+	
+	for(i=0; i < allChildren.length; i++) {
+		if(typeof allChildren[i].innerText != 'undefined' && allChildren[i].innerText.includes("Latitude")) {
+			lat = allChildren[i].innerText;
+		}
+		else if(typeof allChildren[i].innerText != 'undefined' && allChildren[i].innerText.includes("Longitude")) {
+			longi = allChildren[i].innerText;
+		}
+	}
+	
+	lat = lat.replace(/[^\d.-]/g, '');
+	longi = longi.replace(/[^\d.-]/g, '');
+	
+	var postURL = '/remove-place';
+	
+	var postRequest = new XMLHttpRequest();
+	postRequest.open('POST', postURL);
+	postRequest.setRequestHeader('Content-Type', 'application/json');
+	
+	postRequest.addEventListener('load', function (event) {
+		var error;
+		if (event.target.status !== 200) {
+			error = event.target.response;
+		}
+	});
+	
+	postRequest.send(JSON.stringify({
+		"latitude": lat,
+		"longitude": longi
+	}));
+  
+	reloader();
+}
+
 //forces a page refresh to show sorted insertion of new location
 function reloader() {
 	setTimeout("location.reload(true);", 500);
@@ -60,6 +105,21 @@ function reloader() {
 
 //Modal listener set-up
 window.addEventListener('DOMContentLoaded', function (event) {
+	var editHomeButtons = document.getElementsByClassName("edit-home-button");
+	var i;
+	if(editHomeButtons) {
+		for(i = 0; i < editHomeButtons.length; i++) {
+			editHomeButtons[i].addEventListener('click', editHome);
+		}
+	}
+	
+	var delPlace = document.getElementsByClassName("delete-place-button");
+	if(delPlace) {
+		for(i = 0; i < delPlace.length; i++) {
+			delPlace[i].addEventListener('click', deletePlace);
+		}
+	}
+	
 	var addPlaceButton = document.getElementById('add-place-button');
 	if (addPlaceButton) {
 		addPlaceButton.addEventListener('click', displayAddPlaceModal);

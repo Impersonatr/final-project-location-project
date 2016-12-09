@@ -10,27 +10,30 @@
 			<p>
 				Longitude: {{longitude}}
 			</p>
+			<div class="edit-home-container">
+				<button type="button" class="edit-home-button">Edit</button>
+			</div>
 		</div>
 	{{/each}}
 	{{#each Locations}}
 		<div class="place-container">
-			<p>
+			<p id="location">
 				Location: <a target="_blank" href="http://maps.google.com/maps?q={{latitude}},{{longitude}}">{{location}}</a>
 			</p>
-			<p>
+			<p id="latitude">
 				Latitude: {{latitude}}
 			</p>
-			<p>
+			<p id="longitude">
 				Longitude: {{longitude}}
 			</p>
-			<p>
+			<p id="description">
 				Description: {{description}}
 			</p>
-			<p>
+			<p id="distance">
 				Distance: {{distance}}
 			</p>
 			<div class="delete-container">
-				<button id="delete-place">x</button>
+				<button class="delete-place-button">x</button>
 			</div>
 		</div>
 	{{/each}}
