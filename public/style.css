@@ -109,6 +109,7 @@ header {
   background-color: rgba(0, 0, 0, 0.85);
 }
 
+#change-home-modal,
 #add-place-modal {
   position: fixed;
   top: 0;
@@ -143,6 +144,7 @@ header {
   font-size: 28px;
 }
 
+.home-close-button,
 .modal-close-button {
   position: absolute;
   right: 10px;
@@ -200,15 +202,19 @@ header {
   cursor: pointer;
 }
 
+
+.modal-footer .home-cancel-button:hover,
 .modal-footer .modal-cancel-button:hover {
   background-color: #eee;
 }
 
+.modal-footer .home-accept-button,
 .modal-footer .modal-accept-button {
   background-color: #2464f5;
   color: #fff;
 }
 
+.modal-footer .home-accept-button:hover,
 .modal-footer .modal-accept-button:hover {
   background-color: #5481e4;
 }

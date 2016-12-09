@@ -11,12 +11,15 @@
 				Longitude: {{longitude}}
 			</p>
 			<div class="edit-home-container">
-				<button type="button" class="edit-home-button">Edit</button>
+				<button type="button" id="edit-home-button">Edit</button>
 			</div>
 		</div>
 	{{/each}}
 	{{#each Locations}}
 		<div class="place-container">
+			<div class="delete-container">
+				<button class="delete-place-button">x</button>
+			</div>
 			<p id="location">
 				Location: <a target="_blank" href="http://maps.google.com/maps?q={{latitude}},{{longitude}}">{{location}}</a>
 			</p>
@@ -32,11 +35,9 @@
 			<p id="distance">
 				Distance: {{distance}}
 			</p>
-			<div class="delete-container">
-				<button class="delete-place-button">x</button>
-			</div>
 		</div>
 	{{/each}}
 </main>
 
 {{> add-place-modal}}
+{{> change-home-modal}}

@@ -9,11 +9,11 @@ function storeNewLocation(title, lati, longi, desc, callback) {
 	postRequest.setRequestHeader('Content-Type', 'application/json');
 	
 	postRequest.addEventListener('load', function (event) {
-    var error;
-    if (event.target.status !== 200) {
-		error = event.target.response;
-    }
-	callback(error);
+		var error;
+		if (event.target.status !== 200) {
+			error = event.target.response;
+		}
+		callback(error);
 	});
 	
 	postRequest.send(JSON.stringify({
@@ -22,5 +22,26 @@ function storeNewLocation(title, lati, longi, desc, callback) {
 		"longitude": longi,
 		"description": desc,
 		"distance": "0"
+  }));
+}
+
+function storeNewHome(latitude, longitude, callback) {
+	var postUrl = '/update-home';
+
+	var postRequest = new XMLHttpRequest();
+	postRequest.open('POST', postUrl);
+	postRequest.setRequestHeader('Content-Type', 'application/json');
+	
+	postRequest.addEventListener('load', function (event) {
+		var error;
+		if (event.target.status !== 200) {
+			error = event.target.response;
+		}
+		callback(error);
+	});
+	
+	postRequest.send(JSON.stringify({
+		"latitude": latitude,
+		"longitude": longitude
   }));
 }

@@ -156,7 +156,7 @@ app.post('/remove-place', function (req, res, next) {
 		[req.body.latitude, req.body.longitude], function(err){
 			if (err) {
 				console.log("== Error deleting location from database:", err);
-				res.status(500).send("Error inserting new location into database: " + err);
+				res.status(500).send("Error deleting location: " + err);
 			}
 			else{res.status(200).send();}			
 		});
@@ -167,10 +167,30 @@ app.post('/remove-place', function (req, res, next) {
 
 app.post('/update-home', function (req, res, next) {
 	if(req.body) {
-		
+		mysqlConnection.query('TRUNCATE TABLE HomeTable', function(err) {
+			if(err) {
+				console.log("== Error removing old Home:", err);
+				res.status(500).send("Error removing old Home: " + err);
+			}
+			else {
+				mysqlConnection.query('INSERT INTO HomeTable (Latitude, Longitude) VALUES (?, ?)',
+				[req.body.latitude, req.body.longitude], function (err, result) {
+					if (err) {
+						console.log("== Error inserting Locations from database:", err);
+						res.status(500).send("Error inserting new location into database: " + err);
+					}
+					else{
+						var i;
+						res.status(200).send();
+						
+						
+						
+						
+					}
+				});
+			}
+		});
 	}
-
-
 });
 
 //The following function calculates the distance between our coordinates

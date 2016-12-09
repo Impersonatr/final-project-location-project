@@ -1,15 +1,13 @@
-//client-side functions!
-
-
+/*
+ *  all functions related to adding/removing a place
+ */
 function displayAddPlaceModal() {
-
 	var backdropElem = document.getElementById('modal-backdrop');
 	var addPlaceModalElem = document.getElementById('add-place-modal');
 
 	//Un-hide the modal
 	backdropElem.classList.remove('hidden');
 	addPlaceModalElem.classList.remove('hidden');
-
 }
 
 
@@ -53,18 +51,14 @@ function insertNewPlace() {
 	else {alert('You must specify a title!');}
 }
 
-function editHome (event) {
-	var clickedElem = event.target;
-	var clickedElemParent = event.target.parentNode;
-	alert('I get these:', clickedElem, clickedElemParent);
-}
-
+//delete a place
 function deletePlace (event) {
 	var i, lat, longi;
 	var clickedElemParent = event.target.parentNode;
 	var clickedPlaceContainer = clickedElemParent.parentNode;
 	var allChildren = clickedPlaceContainer.childNodes;
 	
+	//get lat and long
 	for(i=0; i < allChildren.length; i++) {
 		if(typeof allChildren[i].innerText != 'undefined' && allChildren[i].innerText.includes("Latitude")) {
 			lat = allChildren[i].innerText;
@@ -74,6 +68,7 @@ function deletePlace (event) {
 		}
 	}
 	
+	//trim
 	lat = lat.replace(/[^\d.-]/g, '');
 	longi = longi.replace(/[^\d.-]/g, '');
 	
@@ -98,20 +93,98 @@ function deletePlace (event) {
 	reloader();
 }
 
+
+
+
+
+/*
+ *  all functions related to editing Home
+ */
+function displayEditModal(event) {
+	var backdropElem = document.getElementById('modal-backdrop');
+	var homeModalElem = document.getElementById('change-home-modal');
+	
+	var i, lat, longi;
+	var clickedElemParent = event.target.parentNode;
+	var clickedPlaceContainer = clickedElemParent.parentNode;
+	var allChildren = clickedPlaceContainer.childNodes;
+	
+	//get lat and long
+	for(i=0; i < allChildren.length; i++) {
+		if(typeof allChildren[i].innerText != 'undefined' && allChildren[i].innerText.includes("Latitude")) {
+			lat = allChildren[i].innerText;
+		}
+		else if(typeof allChildren[i].innerText != 'undefined' && allChildren[i].innerText.includes("Longitude")) {
+			longi = allChildren[i].innerText;
+		}
+	}
+	
+	//trim
+	lat = lat.replace(/[^\d.-]/g, '');
+	longi = longi.replace(/[^\d.-]/g, '');
+	
+	console.log(lat, longi);
+	
+	var latitude = document.getElementById('home-lat-input').value = lat;
+	var longitude = document.getElementById('home-long-input').value = longi;
+
+	
+
+	//Un-hide the modal
+	backdropElem.classList.remove('hidden');
+	homeModalElem.classList.remove('hidden');
+}
+
+function closeEditModal() {
+	var backdropElem = document.getElementById('modal-backdrop');
+	var homeModalElem = document.getElementById('change-home-modal');
+
+
+	backdropElem.classList.add('hidden');
+	homeModalElem.classList.add('hidden');
+
+	clearPlaceInputValues();
+}
+
+function editHome() {
+	var latitude = document.getElementById('home-lat-input').value || '';
+	var longitude = document.getElementById('home-long-input').value || '';
+	
+	latitude = latitude.replace(/[^\d.-]/g, '');
+	longitude = longitude.replace(/[^\d.-]/g, '');
+	
+	if (latitude.trim() && longitude.trim()) {
+		storeNewHome(latitude, longitude, function (err) {
+			if (err) {alert("Unable to change home for the following reason:\n\n" + err);}
+		});
+    
+	closeEditModal();
+	reloader();
+	}
+	else {alert('You must specify both latitude and longitude!');}
+}
+
+
+/*
+ *  Miscellaneous Functions
+ */	
+
+
+
 //forces a page refresh to show sorted insertion of new location
 function reloader() {
 	setTimeout("location.reload(true);", 500);
 }
 
-//Modal listener set-up
+//Listener set-up
 window.addEventListener('DOMContentLoaded', function (event) {
-	var editHomeButtons = document.getElementsByClassName("edit-home-button");
+	/* var editHomeButtons = document.getElementsByClassName("edit-home-button");
 	var i;
 	if(editHomeButtons) {
 		for(i = 0; i < editHomeButtons.length; i++) {
 			editHomeButtons[i].addEventListener('click', editHome);
 		}
-	}
+	} */
 	
 	var delPlace = document.getElementsByClassName("delete-place-button");
 	if(delPlace) {
@@ -120,6 +193,8 @@ window.addEventListener('DOMContentLoaded', function (event) {
 		}
 	}
 	
+	
+	//add place modal
 	var addPlaceButton = document.getElementById('add-place-button');
 	if (addPlaceButton) {
 		addPlaceButton.addEventListener('click', displayAddPlaceModal);
@@ -138,5 +213,28 @@ window.addEventListener('DOMContentLoaded', function (event) {
 	var modalAcceptButton = document.querySelector('#add-place-modal .modal-accept-button');
 	if (modalAcceptButton) {
 		modalAcceptButton.addEventListener('click', insertNewPlace);
+	}
+	
+	
+	
+	//Edit Home Modal
+	var editHomeButton = document.getElementById('edit-home-button');
+	if (editHomeButton) {
+		editHomeButton.addEventListener('click', displayEditModal);
+	}
+
+	var homeCloseButton = document.querySelector('#change-home-modal .home-close-button');
+	if (homeCloseButton) {
+		homeCloseButton.addEventListener('click', closeEditModal);
+	}
+
+	var homeCancelButton = document.querySelector('#change-home-modal .home-cancel-button');
+	if (homeCancelButton) {
+		homeCancelButton.addEventListener('click', closeEditModal);
+	}
+
+	var homeAcceptButton = document.querySelector('#change-home-modal .home-accept-button');
+	if (homeAcceptButton) {
+		homeAcceptButton.addEventListener('click', editHome);
 	}
 });
