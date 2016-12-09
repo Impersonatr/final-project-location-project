@@ -27,6 +27,15 @@ a:hover {
   background-color: #C34500;
 }
 
+
+header {
+  //This function adds a gradient to the header
+  background-color: #C34500;
+  background-image: url(images/linear_bg_1.png);
+  background-repeat: repeat-y;
+  background: -webkit-gradient(linear, left top, right top, from(#373737), to(#C34500));
+}
+
 .place-container {
   margin: auto;
   margin-bottom: 20px;
@@ -71,11 +80,14 @@ a:hover {
 #add-place-button {
   width: 64px;
   height: 64px;
-  background-color: red;
+  position:fixed;
+  top:2%;
+  right:2%;
+  background-color: #E8CDA1;
   border: none;
   border-radius: 32px;
   box-shadow: 1px 4px 8px rgba(0, 0, 0, 0.25);
-  color: white;
+  color: #373737;
   font-size: 40px;
   font-weight: 200;
   padding: 0 0 8px 0;
