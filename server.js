@@ -30,7 +30,7 @@ mysqlConnection.connect(function(err) {
 		throw err;
 	}
 });
-
+ 
 /*
  * Set up Express to use express-handlebars as the view engine.  This means
  * that when you call res.render('page'), Express will look in `views/` for a
@@ -43,7 +43,7 @@ mysqlConnection.connect(function(err) {
  * will take the content from `views/page.handlebars` and plug it into the
  * {{{body}}} placeholder in `views/layouts/main.handlebars`.
  */
-
+ 
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }))
 app.set('view engine', 'handlebars');
 
@@ -61,7 +61,7 @@ app.get('/', function (req, res) {
 		  console.log("== Error fetching locations from database:", err);
 		  res.status(500).send("Error fetching locations from database: " + err);
 		}
-
+		
 		else{
 			mysqlConnection.query('SELECT * FROM HomeTable', function(err, home){
 				if (err) {
@@ -79,7 +79,7 @@ app.get('/', function (req, res) {
 							distance: row.Distance
 						});
 					});
-
+					
 					var homeT = [];
 					home.forEach(function(home) {
 						homeT.push ({
@@ -89,7 +89,7 @@ app.get('/', function (req, res) {
 						});
 					});
 					res.render('index-page', {
-						pageTitle: 'Beaver Locatorator',
+						pageTitle: 'Project - Locations',
 						Locations: locations,
 						Home: homeT
 					});
@@ -133,10 +133,10 @@ app.post('/add-place', function (req, res, next) {
 						longitude: home.Longitude
 					});
 				});
-
+				
 				//calculate the distance!
 				var distance = getDistance(homeT[0].latitude, homeT[0].longitude, req.body);
-
+				
 				mysqlConnection.query('INSERT INTO Locations (Title, Latitude, Longitude, Description, Distance) VALUES (?, ?, ?, ?, ?)',
 				[req.body.title, req.body.latitude, req.body.longitude, req.body.description, distance], function (err, result) {
 					if (err) {
@@ -158,7 +158,7 @@ app.post('/remove-place', function (req, res, next) {
 				console.log("== Error deleting location from database:", err);
 				res.status(500).send("Error deleting location: " + err);
 			}
-			else{res.status(200).send();}
+			else{res.status(200).send();}			
 		});
 	}
 
@@ -180,12 +180,38 @@ app.post('/update-home', function (req, res, next) {
 						res.status(500).send("Error inserting new location into database: " + err);
 					}
 					else{
-						var i;
-						res.status(200).send();
-
-
-
-
+						mysqlConnection.query('SELECT Latitude, Longitude, Distance FROM Locations', function(err, loc){
+							if (err) {
+								console.log("== Error inserting Locations from database:", err);
+								res.status(500).send("Error inserting new location into database: " + err);
+							}
+							else {
+								var locations = [];
+								loc.forEach(function(loc){
+									locations.push({
+										latitude: loc.Latitude,
+										longitude: loc.Longitude,
+										distance: loc.Distance
+									});
+								});
+								var i, newDist;
+								for(i=0; i<locations.length; i++) {
+									newDist = getDistance(req.body.latitude, req.body.longitude, locations[i]);
+									mysqlConnection.query('UPDATE Locations SET Distance = ? WHERE Distance = ?', 
+									[newDist, loc[i].Distance], function(err){
+										if(err) {
+											console.log("== Error updating distances:", err);
+											res.status(500).send("Error updating distances: " + err);
+										}
+									});
+								}
+								res.status(200).send();
+							}
+						});
+						
+						
+						
+						
 					}
 				});
 			}
@@ -194,18 +220,18 @@ app.post('/update-home', function (req, res, next) {
 });
 
 //The following function calculates the distance between our coordinates
-function getDistance(lati, longi, newRow){
+function getDistance(lati, longi, newRow){	
 	var lat1 = lati;
 	var lat2 = newRow.latitude;
 	var long1 = longi;
 	var long2 = newRow.longitude;
 	var deltaLat;
 	var deltaLong;
-
+	
 	var R = 3961; //this is the radius of the Earth in miles
 	deltaLat = lat2 - lat1;
 	deltaLong = long2 - long1;
-
+	
 	var x = Math.pow(Math.sin(deltaLat * Math.PI / 180.0), 2) + Math.cos(lat1) * Math.cos(lat2) * Math.pow(Math.sin(deltaLong * Math.PI / 180.0), 2);
 	var y = 2 * Math.atan2(Math.sqrt(x), Math.sqrt(1-x));
 	var dist = R * y;

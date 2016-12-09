@@ -11,7 +11,6 @@ header {
   background-color: #373737;
   color: #C34500;
   font-family:fantasy;
-  box-shadow: 2px 6px 10px rgba(0, 0, 0, 0.60);
 }
 
 header h1 {
@@ -35,7 +34,6 @@ header {
   background-image: url(images/linear_bg_1.png);
   background-repeat: repeat-y;
   background: -webkit-gradient(linear, left top, right top, from(#373737), to(#C34500));
-  text-shadow: 2px 8px 12px rgba(0, 0, 0, 0.80);
 }
 
 .place-container {
@@ -47,12 +45,7 @@ header {
   border: 3px solid #333;
   border-radius: 10px;
   background-color: #fff;
-  background-image: url("location_background.jpg");
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: right;
   color: #373737;
-  box-shadow: 2px 6px 10px rgba(0, 0, 0, 0.60);
 }
 
 .place-container p {
@@ -66,7 +59,6 @@ header {
   border-radius: 10px;
   background-color: #E8CDA1;
   color: #373737;
-    box-shadow: 2px 6px 10px rgba(0, 0, 0, 0.60);
 }
 
 .Home p {
@@ -89,38 +81,22 @@ header {
   width: 64px;
   height: 64px;
   position:fixed;
-  top:4%;
+  top:2%;
   right:2%;
   background-color: #E8CDA1;
   border: none;
   border-radius: 32px;
-  box-shadow: 2px 6px 10px rgba(0, 0, 0, 0.60);
+  box-shadow: 1px 4px 8px rgba(0, 0, 0, 0.25);
   color: #373737;
   font-size: 40px;
   font-weight: 200;
   padding: 0 0 8px 0;
   cursor: pointer;
   outline: none;
-  animation: bounce 1s infinite alternate;
 }
-@keyframes bounce {
-  from {
-    transform: translateY(0px);
-  }
-  to {
-    transform: translateY(-15px);
-  }
-}
-
 
 #add-place-button:hover {
   box-shadow: 2px 6px 12px rgba(0, 0, 0, 0.33);
-}
-
-.delete-container{
-  position: relative;
-  left: 97%;
-  height: 5px;
 }
 
 #modal-backdrop {
